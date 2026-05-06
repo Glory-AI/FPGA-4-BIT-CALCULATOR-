@@ -1,101 +1,82 @@
 # FPGA-4-BIT-CALCULATOR-
 A simple but functional calculator implemented on an FPGA using VHDL.
 
-Good — then you want this to read like a clean, professional GitHub README, not a school report.
+* FPGA: Field-Programmable Gate Array
+* VHDL: VHSIC (Very High-Speed Integrated Circuit) Hardware Description Language
 
-Here’s a polished version tailored for GitHub (clear, concise, and still in your voice 👇):
-
-
----
-
-🧮 FPGA 4-bit Calculator
-
-A simple but functional calculator implemented on an FPGA using VHDL.
 This project performs basic arithmetic operations (addition and subtraction) on two 4-bit binary inputs and displays the result on a dual seven-segment display.
 
+## Overview
 
----
-
-🚀 Overview
-
-This project was built to explore digital design using FPGA — from binary arithmetic to real-time hardware display.
+This project was built to explore digital design using FPGA from binary arithmetic to real-time hardware display.
 
 The idea is straightforward:
 
-Take two 4-bit binary numbers
+* Take two 4-bit binary numbers
 
-Use a selector to choose the operation
+* Use a selector to choose the operation
 
-Display the result in decimal (tens and units) on HEX displays
-
-
-What made it interesting wasn’t the logic itself, but how the output was handled and displayed efficiently.
+* Display the result in decimal (tens and units) on HEX displays
 
 
----
-
-🧠 Features
-
-4-bit input operands
-
-Addition and subtraction support
-
-Real-time result display on 7-segment (HEX)
-
-Automatic conversion from binary result → decimal digits
-
-Clean and scalable VHDL design
+What made it more interesting was how the output was handled and displayed efficiently.
 
 
 
----
 
-🎛️ Inputs
+## Features
 
-Input	Description
+* 4-bit input operands
 
-SW8–SW5	First operand (A)
-SW4–SW1	Second operand (B)
-SEL	Operation selector
+* Addition and subtraction support
 
+* Real-time result display on 7-segment (HEX)
 
-SEL = 0 → Addition
+* Automatic conversion from binary result to decimal digits
 
-SEL = 1 → Subtraction
+* Clean and scalable VHDL design
 
 
 
----
+## Inputs
 
-📟 Outputs
-
-Display	Function
-
-HEX1	Tens digit
-HEX0	Ones digit
-
+| Input | Description |
+| ------| ----------- |
+|SW8–SW5 | First operand (A)|
+|SW4–SW1 |Second operand (B) |
+| SEL |	Operation selector |
 
 
----
+* SEL = 0 → Addition
+* SEL = 1 → Subtraction
 
-⚙️ How It Works
 
-1. Arithmetic Logic
+## Outputs
+
+| Display | Function |
+| ------- | -------- |
+| HEX1|	Tens digit|
+|HEX0|	Ones digit|
+
+
+
+## How It Works
+
+#### 1. Arithmetic Logic
 
 The calculator computes:
 
-Result = A + B   (SEL = 0)
-Result = A - B   (SEL = 1)
+   * Result = A + B   (SEL = 0)
+   * Result = A - B   (SEL = 1)
 
 
----
+#### 2. Digit Extraction 
 
-2. Digit Extraction (Key Idea 💡)
-
-At first, I tried hardcoding all possible outputs using a case statement — not scalable at all.
+At first, all possible outputs were hardcoded using a case statement — not scalable at all.
 
 The better approach was to split the result using division and modulus:
 
+```vhdl
 process(calc_result)
     variable result_int : integer;
     variable tens, ones : integer;
@@ -108,43 +89,34 @@ begin
     tens_digit_out <= std_logic_vector(to_unsigned(tens, 4));
     ones_digit_out <= std_logic_vector(to_unsigned(ones, 4));
 end process;
-
+```
 This automatically maps any result into:
 
-Tens digit → HEX1
-
-Ones digit → HEX0
-
+* Tens digit → HEX1
+* Ones digit → HEX0
 
 
----
 
-3. Display Mapping
+#### 3. Display Mapping
 
 Each digit is sent to a 7-segment decoder which drives the FPGA HEX display.
 
 
----
+Example Outputs
 
-✅ Example Outputs
-
-A	B	Operation	Result	Display
-
-2	2	Add	4	04
-3	3	Add	6	06
-7	4	Subtract	3	03
+| A | B	| Operation | Result Display |
+| - | - | --------- | -------------- |
+|2|	2|	Add	4|	04|
+|3|	3|	Add	6|	06|
+|7|	4|	Subtract 3|	03|
 
 
 
-### Challenges & Fixes
+#### Challenges & Fixes
 
-❌ Hardcoded BCD mapping
+❌ Hardcoded CD mapping- Too long, error-prone
 
-Too long, error-prone
-
-✅ Switched to modulus approach
-
-Cleaner, scalable, efficient
+✅ Switched to modulus approach- Cleaner, scalable, efficient
 
 
 ❌ Display inconsistencies during debugging
@@ -153,11 +125,13 @@ Cleaner, scalable, efficient
 
 
 
----
-
-📚 What I Learned
+## What I Learned
 
 * Difference between <= (signals) and := (variables) in VHDL
+  
+     . Variable: When you assign a value to a variable, it is available for use on the very next line of code.
+  
+     . Signal: When you assign a value to a signal inside a process, the change is "scheduled." The signal retains its old value throughout the current execution of the process and only updates when the process pauses. 
 
 * Efficient number handling in hardware design
 
@@ -168,13 +142,13 @@ Cleaner, scalable, efficient
 
 
 
-🙌 Acknowledgment
+## Acknowledgment
 
 Shoutout to Emmanuel Peter for the guidance and support throughout this project.
 
 
 
-🔗 Future Improvements
+## Future Improvements
 
 * Support for multiplication and division
 
@@ -183,3 +157,4 @@ Shoutout to Emmanuel Peter for the guidance and support throughout this project.
 * Extending to 8-bit operations
 
 * Cleaner modular design (separate decoder component)
+* Full adder and subtractor implementation 
